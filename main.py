@@ -540,8 +540,23 @@ if __name__ == "__main__":
     vocab_src, vocab_tgt = load_vocab(spacy_de, spacy_en)
     load_trained_model(args)
     
-    _, results, score = run_model_eval(args.beam_search, args.beam_size, verbose=True)
+    import matplotlib.pyplot as plt
+
+    beam_sizes = [1, 2, 3, 4, 5]  # Beam sizes to test
+    bleu_scores = []
+
+    for beam_size in beam_sizes:
+        print(f"Evaluating with beam size {beam_size}...")
+        _, _, score = run_model_eval(beam_search=True, beam_size=beam_size, verbose=False)
+        bleu_scores.append(score)
+
+    # Plot BLEU scores vs Beam sizes
+    plt.plot(beam_sizes, bleu_scores, marker='o')
+    plt.xlabel('Beam Size')
+    plt.ylabel('BLEU Score')
+    plt.title('BLEU Score vs Beam Size')
+    plt.show()
     
-    print("Bleu Score: ", score)
+    print("Bleu Score: ", bleu_scores)
     
     
